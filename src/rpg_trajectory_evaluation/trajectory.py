@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import yaml
@@ -215,13 +215,12 @@ class Trajectory:
         factor = 10.0 ** decimals
         return math.trunc(number * factor) / factor
 
-
     def compute_boxplot_distances(self):
         print("Computing preset subtrajectory lengths for relative errors...")
         print("Use percentage {0} of trajectory length.".format(self.boxplot_pcts))
         print("Trajectory length {0}".format(self.traj_length))
         self.preset_boxplot_distances = [self.truncate(pct*self.traj_length, 2)
-                                          for pct in self.boxplot_pcts]
+                                         for pct in self.boxplot_pcts]
 
         print("...done. Computed preset subtrajecory lengths:"
               " {0}".format(self.preset_boxplot_distances))

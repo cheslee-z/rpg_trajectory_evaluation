@@ -24,12 +24,12 @@ def compute_overall_odometry_errors(config_traj_list,
     n_dist = len(overall_boxplot_distances)
     for config_trajectories in config_traj_list:
         config = config_trajectories[0].alg
-        print(('> Processing config {0}...'.format(config)))
+        print('> Processing config {0}...'.format(config))
         total_trans_errors[config] = [[] for d in range(n_dist)]
         total_trans_errors_rel[config] = [[] for d in range(n_dist)]
         total_ang_yaw_errors[config] = [[] for d in range(n_dist)]
         for traj in config_trajectories:
-            print(("> {0}".format(traj.uid)))
+            print("> {0}".format(traj.uid))
             for dist_idx, dist in enumerate(overall_boxplot_distances):
                 traj.compute_relative_error_at_subtraj_len(dist)
                 total_trans_errors[traj.alg][dist_idx].extend(
@@ -38,7 +38,7 @@ def compute_overall_odometry_errors(config_traj_list,
                     traj.rel_errors[dist]['rel_trans_perc'])
                 total_ang_yaw_errors[traj.alg][dist_idx].extend(
                     traj.rel_errors[dist]['rel_yaw'])
-        print(('< ... analysis for config {0} done'.format(config)))
+        print('< ... analysis for config {0} done'.format(config))
     print("<<< ... calculating oveall relative error done.\n")
 
     overall_err = {}
@@ -119,7 +119,7 @@ def plot_overall_odometry_errors(overall_err, output_dir):
 
     config_labels = []
     config_colors = []
-    for v in list(overall_err['trans_err'].keys()):
+    for v in overall_err['trans_err'].keys():
         config_labels.append(PLOT_LABELS[v])
         config_colors.append(COLORS[v])
 
@@ -128,7 +128,7 @@ def plot_overall_odometry_errors(overall_err, output_dir):
     ax = fig.add_subplot(
         111, xlabel='Distance traveled [m]', ylabel='Translation error [m]')
     pu.boxplot_compare(ax, overall_err['distances'],
-                       list(overall_err['trans_err'].values()),
+                       overall_err['trans_err'].values(),
                        config_labels, config_colors)
     fig.tight_layout()
     fig.savefig(output_dir+'/overall_rel_translation_error' +
@@ -140,7 +140,7 @@ def plot_overall_odometry_errors(overall_err, output_dir):
     ax = fig.add_subplot(
         111, xlabel='Distance traveled [m]', ylabel='Translation error [\%]')
     pu.boxplot_compare(ax, overall_err['distances'],
-                       list(overall_err['trans_err_perc'].values()),
+                       overall_err['trans_err_perc'].values(),
                        config_labels, config_colors)
     fig.tight_layout()
     fig.savefig(output_dir+'/overall_rel_translation_error_percentage' +
@@ -152,7 +152,7 @@ def plot_overall_odometry_errors(overall_err, output_dir):
     ax = fig.add_subplot(
         111, xlabel='Distance traveled [m]', ylabel='Yaw error [deg]')
     pu.boxplot_compare(ax, overall_err['distances'],
-                       list(overall_err['yaw_err'].values()),
+                       overall_err['yaw_err'].values(),
                        config_labels, config_colors)
     fig.tight_layout()
     fig.savefig(output_dir+'/overall_rel_yaw_error'+FORMAT,

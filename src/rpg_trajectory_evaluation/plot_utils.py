@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """
 @author: Christian Forster
 """
@@ -42,11 +42,10 @@ def boxplot_compare(ax, xlabels,
         # print("Positions: {0}".format(positions))
         bp = ax.boxplot(d, 0, '', positions=positions, widths=widths)
         color_box(bp, data_colors[idx])
-        tmp, = plt.plot([1, 1], c=data_colors[idx], alpha=0)
+        tmp, = plt.plot([1], c=data_colors[idx])
         leg_handles.append(tmp)
         leg_labels.append(data_labels[idx])
         idx += 1
-
     ax.set_xticks(np.arange(n_xlabel))
     ax.set_xticklabels(xlabels)
     xlims = ax.get_xlim()

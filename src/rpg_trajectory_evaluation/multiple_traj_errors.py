@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import numpy as np
 import os
@@ -93,7 +93,6 @@ class MulTrajError(object):
         for et in self.kAbsMetrics:
             self.abs_errors[et+'_stats'] = rw.compute_statistics(
                 np.array(self.abs_errors[et]))
-
         self.overall_rel_errors = {}
         for et in kRelMetrics:
             values = []

@@ -18,11 +18,11 @@ if __name__ == '__main__':
     outfn = os.path.join(outdir,
                          'stamped_' + os.path.basename(args.id_stamp_gt))
 
-    print(("Going to strip id from {0} and write to {1}".format(
-        args.id_stamp_gt, outfn)))
+    print("Going to strip id from {0} and write to {1}".format(
+        args.id_stamp_gt, outfn))
 
     id_stamp_gt = np.loadtxt(args.id_stamp_gt)
-    print(("Found {0} groundtruth data".format(id_stamp_gt.shape[0])))
+    print("Found {0} groundtruth data".format(id_stamp_gt.shape[0]))
 
     stamp_gt = []
     for v in id_stamp_gt.tolist():
@@ -30,5 +30,5 @@ if __name__ == '__main__':
         stamp_gt.append(stamped_v)
 
     np.savetxt(outfn, stamp_gt, header='time x y z qx qy qz qw')
-    print(("Written {0} stamped groundtruth.".format(len(stamp_gt))))
+    print("Written {0} stamped groundtruth.".format(len(stamp_gt)))
 

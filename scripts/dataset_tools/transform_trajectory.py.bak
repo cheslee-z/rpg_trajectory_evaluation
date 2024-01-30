@@ -99,15 +99,15 @@ if __name__ == '__main__':
         positions.append(np.array(contents[1:4], dtype=float))
         quats.append(np.array(contents[4:8], dtype=float))
     f.close()
-    print(("Read {0} poses.".format(len(timestamp))))
+    print("Read {0} poses.".format(len(timestamp)))
 
     T_HE = np.loadtxt(args.transformation, delimiter=',')
-    print(("Transforamtion to apply:\n{0}".format(T_HE)))
+    print("Transforamtion to apply:\n{0}".format(T_HE))
     N = len(positions)
     assert(N == len(quats))
     transformed_positions = np.zeros([N, 3])
     transformed_quats = np.zeros([N, 4])
-    print(('Transforming {0} trajectory poses'.format(N)))
+    print('Transforming {0} trajectory poses'.format(N))
     for i in range(N):
         T_old = np.eye(4)
         T_old[0:3, 0:3] = quat2dcm(quats[i])
@@ -131,4 +131,4 @@ if __name__ == '__main__':
     outfn = os.path.join(out_dir, "transformed_poses.txt")
     with open(outfn, 'w') as f:
         f.writelines(file_lines)
-    print(("Wrote transformed poses to file {0}.".format(outfn)))
+    print("Wrote transformed poses to file {0}.".format(outfn))

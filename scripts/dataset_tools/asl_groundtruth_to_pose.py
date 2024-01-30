@@ -17,7 +17,7 @@ def extract(gt, out_filename):
             fout.write('%.12f %.12f %.12f %.12f %.12f %.12f %.12f %.12f\n' %
                        (l[0]/1e9, l[1], l[2], l[3], l[5], l[6], l[7], l[4]))
         n = n + 1
-    print('wrote ' + str(n) + ' poses to the file: ' + out_filename)
+    print(('wrote ' + str(n) + ' poses to the file: ' + out_filename))
     fout.close()
 
 
@@ -33,6 +33,6 @@ if __name__ == '__main__':
     output_fn = os.path.join(os.path.dirname(os.path.abspath(args.gt)),
                              args.output)
 
-    print('Extract ground truth pose from file '+args.gt)
-    print('Saving to file '+output_fn)
+    print(('Extract ground truth pose from file '+args.gt))
+    print(('Saving to file '+output_fn))
     extract(args.gt, output_fn)

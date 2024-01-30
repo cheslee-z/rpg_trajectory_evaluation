@@ -2,9 +2,12 @@
 
 import os
 import argparse
-
 import rosbag
-
+import math
+import numpy as np
+from pyquaternion import Quaternion
+from scipy.spatial.transform import Rotation
+import tf
 
 def extract(bagfile, pose_topic, msg_type, out_filename):
     n = 0
@@ -13,30 +16,33 @@ def extract(bagfile, pose_topic, msg_type, out_filename):
     with rosbag.Bag(bagfile, 'r') as bag:
         for (topic, msg, ts) in bag.read_messages(topics=str(pose_topic)):
             if msg_type == "PoseWithCovarianceStamped":
+                # Position conversion
+                flu_position = [msg.pose.pose.position.x, -msg.pose.pose.position.y, -msg.pose.pose.position.z]
+
+                # Orientation conversion
+                frd_quaternion = [msg.pose.pose.orientation.w, msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z]
+                frd_rotation = Rotation.from_quat(frd_quaternion)
+                frd_to_flu_matrix = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]])
+                flu_rotation = frd_to_flu_matrix @ frd_rotation.as_matrix()
+                flu_quaternion = Rotation.from_matrix(flu_rotation).as_quat()
+
                 f.write('%.12f %.12f %.12f %.12f %.12f %.12f %.12f %.12f\n' %
                         (msg.header.stamp.to_sec(),
-                         msg.pose.pose.position.x, msg.pose.pose.position.y,
-                         msg.pose.pose.position.z,
-                         msg.pose.pose.orientation.x,
-                         msg.pose.pose.orientation.y,
-                         msg.pose.pose.orientation.z,
-                         msg.pose.pose.orientation.w))
-            elif msg_type == "PoseStamped":
-                f.write('%.12f %.12f %.12f %.12f %.12f %.12f %.12f %.12f\n' %
-                        (msg.header.stamp.to_sec(),
-                         msg.pose.position.x, msg.pose.position.y,
-                         msg.pose.position.z,
-                         msg.pose.orientation.x, msg.pose.orientation.y,
-                         msg.pose.orientation.z, msg.pose.orientation.w))
+                         flu_position[0], 
+                         flu_position[1],
+                         flu_position[2],
+                         flu_quaternion[3],
+                         flu_quaternion[0],
+                         flu_quaternion[1],
+                         flu_quaternion[2]))
             else:
                 assert False, "Unknown message type"
             n += 1
-    print(('wrote ' + str(n) + ' imu messages to the file: ' + out_filename))
-
+    print(('wrote ' + str(n) + ' messages to the file: ' + out_filename))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='''
-    Extracts IMU messages from bagfile.
+    Extracts messages from bagfile.
     ''')
     parser.add_argument('bag', help='Bagfile')
     parser.add_argument('topic', help='Topic')

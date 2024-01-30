@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import argparse
@@ -26,12 +26,7 @@ rc('text', usetex=True)
 
 FORMAT = '.pdf'
 
-def spec(N):                                             
-    t = np.linspace(-510, 510, N)                                              
-    return np.round(np.clip(np.stack([-t, 510-np.abs(t), t], axis=1), 0, 255)).astype("float32")/255
-
-PALLETE = spec(20)
-
+PALLETE = ['b', 'g', 'r', 'c', 'k', 'y', 'm']
 
 def collect_odometry_error_per_dataset(dataset_multierror_list,
                                        dataset_names):
